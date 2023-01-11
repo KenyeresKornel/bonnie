@@ -55,7 +55,11 @@ As the following:
    bash:   - mvn jasypt:encrypt-value -Djasypt.encryptor.password=$BONNEE_MASTER_PWD -Djasypt.encryptor.algorithm=PBEWithMD5AndDES -Djasypt.plugin.value=$POSTGRES_PWD
    3. Grab the output value of each, (it starts with ENC(..., ) then place into the application properties file
    e.g: spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)
+
+Possible error:
+No jasypt.plugin.value property provided -> Add "..." around the parameters like: 
     
+    "-Djasypt.encryptor.password=$BONNEE_MASTER_PWD" "-Djasypt.encryptor.algorithm=PBEWithMD5AndDES" "-Djasypt.plugin.value=$POSTGRES_USR"
 ### Kafka
 
 The project uses Kafka as the message broker. You have to install, and configure it separately before starting the
