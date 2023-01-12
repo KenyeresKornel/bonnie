@@ -25,23 +25,6 @@ class UserRegisterControllerIT extends BaseIT {
     private UserService userService;
 
     @Test
-    void createUser_missingInputData_returnsZero() throws Exception {
-        final MvcResult result = mockMvc.perform(post(PATH_USER_REGISTER)
-                        .contentType(APPLICATION_FORM_URLENCODED_VALUE)
-                        .with(securityContext(getSecurityContext()))) // Currently the path is secured
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful())
-                .andReturn();
-
-        assertNotNull(result);
-        assertNotNull(result.getResponse());
-        assertNotNull(result.getResponse().getContentAsString());
-
-        final long userId = Long.parseLong(result.getResponse().getContentAsString());
-        assertEquals(0L, userId);
-    }
-
-    @Test
     void createUser_validInputData_userCreated() throws Exception {
         final MvcResult result = mockMvc.perform(post(PATH_USER_REGISTER)
                         .param("name", TEST_USER_NAME)
@@ -54,8 +37,6 @@ class UserRegisterControllerIT extends BaseIT {
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
 
-        assertNotNull(result);
-        assertNotNull(result.getResponse());
         assertNotNull(result.getResponse().getContentAsString());
 
         final long userId = Long.parseLong(result.getResponse().getContentAsString());

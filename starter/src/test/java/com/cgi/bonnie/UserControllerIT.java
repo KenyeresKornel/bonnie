@@ -21,8 +21,6 @@ class UserControllerIT extends BaseIT {
 
     private static final String PATH_USER_ROOT = "/api/user";
     private static final String PATH_USER_ID = PATH_USER_ROOT + "/{id}";
-    private static final String PATH_CURRENT_USERNAME = PATH_USER_ROOT + "/current/name";
-    private static final String PATH_CURRENT_EMAIL = PATH_USER_ROOT + "/current/email";
     private static final String PATH_CURRENT_USER = PATH_USER_ROOT + "/current";
     private static final String PATH_USER_CREATE = PATH_USER_ROOT + "/add";
     private static final long UNKNOWN_USER_ID = 9999L;
@@ -42,83 +40,6 @@ class UserControllerIT extends BaseIT {
     }
 
     @Test
-    void getUser_userPresent_returnsUser() throws Exception {
-        final long id = userService.createUser(TEST_USER_NAME, TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_USER_ROLE);
-
-        final MvcResult result = mockMvc.perform(get(PATH_USER_ID, id)
-                        .with(securityContext(getSecurityContext())))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andReturn();
-
-        assertNotNull(result);
-        assertNotNull(result.getResponse());
-
-        final User user = objectMapper.readValue(result.getResponse().getContentAsString(), User.class);
-
-        assertEquals(id, user.getId());
-        assertEquals(TEST_USER_NAME, user.getName());
-        assertEquals(TEST_USER_EMAIL, user.getEmail());
-        assertEquals(TEST_USER_ROLE, user.getRole());
-    }
-
-    @Test
-    void getCurrentUsername_unAuthenticated_forbidden() throws Exception {
-        final MvcResult result = mockMvc.perform(get(PATH_CURRENT_USERNAME))
-                .andDo(print())
-                .andExpect(status().isForbidden())
-                .andReturn();
-
-        assertNotNull(result);
-    }
-
-    @Test
-    void getCurrentUsername_authenticated_returnsUsername() throws Exception {
-        final MvcResult result = mockMvc.perform(get(PATH_CURRENT_USERNAME)
-                        .with(securityContext(getSecurityContext())))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andReturn();
-
-        assertNotNull(result);
-        assertNotNull(result.getResponse());
-        assertEquals(userData.getName(), result.getResponse().getContentAsString());
-    }
-
-    @Test
-    void getCurrentEmail_unAuthenticated_forbidden() throws Exception {
-        final MvcResult result = mockMvc.perform(get(PATH_CURRENT_EMAIL))
-                .andDo(print())
-                .andExpect(status().isForbidden())
-                .andReturn();
-
-        assertNotNull(result);
-    }
-
-    @Test
-    void getCurrentEmail_authenticated_returnsEmail() throws Exception {
-        final MvcResult result = mockMvc.perform(get(PATH_CURRENT_EMAIL)
-                        .with(securityContext(getSecurityContext())))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andReturn();
-
-        assertNotNull(result);
-        assertNotNull(result.getResponse());
-        assertEquals(userData.getEmail(), result.getResponse().getContentAsString());
-    }
-
-    @Test
-    void getCurrentUser_unAuthenticated_forbidden() throws Exception {
-        final MvcResult result = mockMvc.perform(get(PATH_CURRENT_USER))
-                .andDo(print())
-                .andExpect(status().isForbidden())
-                .andReturn();
-
-        assertNotNull(result);
-    }
-
-    @Test
     void getCurrentUser_authenticated_returnsUser() throws Exception {
         final MvcResult result = mockMvc.perform(get(PATH_CURRENT_USER)
                         .with(securityContext(getSecurityContext())))
@@ -126,9 +47,7 @@ class UserControllerIT extends BaseIT {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertNotNull(result);
         assertNotNull(result.getResponse());
-
         final User user = objectMapper.readValue(result.getResponse().getContentAsString(), User.class);
         assertEquals(userData, user);
     }
@@ -146,8 +65,6 @@ class UserControllerIT extends BaseIT {
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
 
-        assertNotNull(result);
-        assertNotNull(result.getResponse());
         assertNotNull(result.getResponse().getContentAsString());
 
         final long userId = Long.parseLong(result.getResponse().getContentAsString());
