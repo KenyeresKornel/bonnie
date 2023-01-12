@@ -14,6 +14,7 @@
         <module>bonnie-rest</module>
         <module>communicationPlugIn-Kafka</module>
         <module>postgres-storage</module>
+        <module>e-commerce</module>
     </modules>
     <packaging>pom</packaging>
 

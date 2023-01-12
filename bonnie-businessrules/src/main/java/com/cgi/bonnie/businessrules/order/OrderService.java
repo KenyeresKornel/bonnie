@@ -134,6 +134,7 @@ public class OrderService {
             return -1;
         }
         order.setStatus(Status.NEW);
+        order.setLastUpdate(LocalDateTime.now());
         order.setAssignedTo(null);
         long id = orderStorage.create(order);
         if (id > 0L) {
