@@ -65,10 +65,6 @@ class BaseIT {
     void setup() {
         userCredentials = userCredentialStorage.findByEmail(TEST_EMAIL);
         userData = userStorage.findByEmail(TEST_EMAIL);
-        /*
-                userStorage.create(new User().withName(TEST_USER_NAME).withEmail(TEST_USER_EMAIL).withRole(TEST_USER_ROLE), TEST_USER_PASSWORD);
-        userCredentials = userCredentialStorage.findByEmail(TEST_USER_EMAIL);
-         */
     }
 
     LoginData getLoginData() {
