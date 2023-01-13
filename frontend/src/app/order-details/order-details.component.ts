@@ -72,4 +72,7 @@ export class OrderDetailsComponent implements OnInit {
   claimOrder(order : number): void{ 
     this.orderControllerService.assignToMe(order).subscribe();
   }
+  finishOrder(order : number): void{ 
+    this.orderControllerService.finishOrder(order).subscribe();
+  }
 }
