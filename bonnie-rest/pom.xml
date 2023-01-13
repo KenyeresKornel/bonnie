@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.cgi.bonnie</groupId>
         <artifactId>bonnie-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${bonnie.version}</version>
     </parent>
     <artifactId>rest</artifactId>
     <name>rest</name>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>com.cgi.bonnie</groupId>
             <artifactId>businessrules</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${bonnie.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
