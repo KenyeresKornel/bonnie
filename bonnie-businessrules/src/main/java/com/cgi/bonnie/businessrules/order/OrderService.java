@@ -129,12 +129,19 @@ public class OrderService {
             log.error(" Invalid quantity in {}", order);
             return -1;
         }
+        if (order.getShopOrderId() == null || order.getShopOrderId().isBlank()) {
+            log.error("ShopOrderId cannot be null or blank");
+            return -1;
+        }
         if (orderStorage.findAllByShopOrderId(order.getShopOrderId()).size() > 0) {
             log.error(" ShopOrderId [{}] already exists {}", order.getShopOrderId(), order);
             return -1;
         }
         order.setStatus(Status.NEW);
         order.setAssignedTo(null);
+        if (order.getLastUpdate() == null) {
+            order.setLastUpdate(LocalDateTime.now());
+        }
         long id = orderStorage.create(order);
         if (id > 0L) {
             order.setId(id);

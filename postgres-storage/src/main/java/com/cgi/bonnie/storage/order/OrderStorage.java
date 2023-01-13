@@ -5,6 +5,8 @@ import com.cgi.bonnie.businessrules.order.Order;
 import com.cgi.bonnie.businessrules.user.User;
 import com.cgi.bonnie.businessrules.user.UserStorage;
 import com.cgi.bonnie.storage.user.UserMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,8 @@ import java.util.stream.Collectors;
 @Component
 @Primary
 public class OrderStorage implements com.cgi.bonnie.businessrules.order.OrderStorage {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderStorage.class);
 
     private OrderRepository orderRepository;
 
@@ -44,6 +48,7 @@ public class OrderStorage implements com.cgi.bonnie.businessrules.order.OrderSto
         try {
             return orderRepository.save(mapper.fromOrder(order)).getId();
         } catch (Exception e) {
+            LOGGER.warn("Order cannot be created. ", e);
             return 0L;
         }
     }

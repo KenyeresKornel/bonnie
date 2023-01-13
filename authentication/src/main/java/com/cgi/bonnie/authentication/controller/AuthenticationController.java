@@ -1,6 +1,8 @@
 package com.cgi.bonnie.authentication.controller;
 
 import com.cgi.bonnie.authentication.auth.ApplicationUserDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class AuthenticationController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
+
     @Autowired
     private ApplicationUserDao applicationUserDao;
     @Autowired
@@ -37,6 +41,7 @@ public class AuthenticationController {
             securityContext.setAuthentication(authentication);
             securityContextRepository.saveContext(securityContext, request, response);
         } catch (Exception e) {
+            LOGGER.error("Cannot perform login.", e);
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();
