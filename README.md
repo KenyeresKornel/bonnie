@@ -65,6 +65,13 @@ Possible error:
 No jasypt.plugin.value property provided -> Add "..." around the parameters like: 
     
     "-Djasypt.encryptor.password=$BONNEE_MASTER_PWD" "-Djasypt.encryptor.algorithm=PBEWithMD5AndDES" "-Djasypt.plugin.value=$POSTGRES_USR"
+
+### VPS Docker Postgres setup for developer environment
+                                                     
+docker run -d --name "${USER}_postgres" -p 127.0.0.1:[pick free port num]:5432 -e POSTGRES_PASSWORD=doodle -e POSTGRES_USER=doodle -v /home/$USER/postgres/db:/var/lib/postgresql/data postgres
+
+ssh -N [${USER}]@bonnee.eu -L 5432:127.0.0.1:[picked port number]
+
 ### Kafka
 
 The project uses Kafka as the message broker. You have to install, and configure it separately before starting the
