@@ -13,4 +13,5 @@
 
 <button mat-raised-button *ngIf="order?.status == 'ASSEMBLED'" color="primary" (click)="openTrackingNr(order!)">Set tracking nr</button>
 <button mat-raised-button *ngIf="order?.status == 'CLAIMED'" color="primary" (click)="releaseOrder(order!.id!)" routerLink="/my-orders">Release order</button>
+<button mat-raised-button *ngIf="order?.status == 'CLAIMED'" color="primary" (click)="finishOrder(order!.id!)" routerLink="/my-orders">Finish order</button>
 <button mat-raised-button *ngIf="order?.status == 'NEW'" color="primary" (click)="claimOrder(order!.id!)" routerLink="/my-orders">Claim order</button>
