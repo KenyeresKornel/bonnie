@@ -1,4 +1,4 @@
-package com.cgi.bonnie.h2storage.order;
+package com.cgi.bonnie.storage.order;
 
 import com.cgi.bonnie.businessrules.Status;
 import org.springframework.data.annotation.Id;

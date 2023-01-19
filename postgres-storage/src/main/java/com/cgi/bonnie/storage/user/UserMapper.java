@@ -1,4 +1,4 @@
-package com.cgi.bonnie.h2storage.user;
+package com.cgi.bonnie.storage.user;
 
 import com.cgi.bonnie.businessrules.user.User;
 import com.cgi.bonnie.businessrules.user.UserCredentials;

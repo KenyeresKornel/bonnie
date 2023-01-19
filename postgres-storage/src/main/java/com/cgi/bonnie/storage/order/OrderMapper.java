@@ -1,7 +1,7 @@
-package com.cgi.bonnie.h2storage.order;
+package com.cgi.bonnie.storage.order;
 
 import com.cgi.bonnie.businessrules.order.Order;
-import com.cgi.bonnie.h2storage.user.H2UserStorage;
+import com.cgi.bonnie.businessrules.user.UserStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class OrderMapper {
 
     @Autowired
-    private H2UserStorage userStorage;
+    private UserStorage userStorage;
 
     public AssemblyOrder fromOrder(Order order) {
         return new AssemblyOrder(order.getId())

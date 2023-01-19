@@ -1,6 +1,5 @@
-package com.cgi.bonnie.h2storage.user;
+package com.cgi.bonnie.storage.user;
 
-import com.cgi.bonnie.businessrules.user.UserCredentialStorage;
 import com.cgi.bonnie.businessrules.user.UserCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,14 +8,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class H2UserCredentialStorage implements UserCredentialStorage {
+public class UserCredentialStorage implements com.cgi.bonnie.businessrules.user.UserCredentialStorage {
 
-    private final H2UserRepository repository;
+    private final UserRepository repository;
 
     private final UserMapper mapper;
 
     @Autowired
-    public H2UserCredentialStorage(H2UserRepository repository, UserMapper mapper) {
+    public UserCredentialStorage(UserRepository repository, UserMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }

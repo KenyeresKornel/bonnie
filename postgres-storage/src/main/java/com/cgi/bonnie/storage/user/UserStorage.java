@@ -1,7 +1,6 @@
-package com.cgi.bonnie.h2storage.user;
+package com.cgi.bonnie.storage.user;
 
 import com.cgi.bonnie.businessrules.user.User;
-import com.cgi.bonnie.businessrules.user.UserStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -11,13 +10,13 @@ import java.util.stream.Collectors;
 
 @Component
 @Primary
-public class H2UserStorage implements UserStorage {
+public class UserStorage implements com.cgi.bonnie.businessrules.user.UserStorage {
 
-    final private H2UserRepository repository;
+    final private UserRepository repository;
     final private UserMapper mapper;
 
     @Autowired
-    public H2UserStorage(H2UserRepository repository, UserMapper mapper) {
+    public UserStorage(UserRepository repository, UserMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }

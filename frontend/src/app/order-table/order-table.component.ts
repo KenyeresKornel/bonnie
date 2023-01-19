@@ -40,4 +40,10 @@ export class OrderTableComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
     this.router.navigate([this.router.url]);
   }
+
+  finishOrder(order : number): void{ 
+    this.orderControllerService.finishOrder(order).subscribe();
+    this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
+    this.router.navigate([this.router.url]);
+  }
 }

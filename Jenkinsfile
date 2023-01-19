@@ -1,5 +1,13 @@
 pipeline {
     agent any
+
+    environment {
+       DB_ROOT_USERNAME = credentials('DB_ROOT_USERNAME')
+       DB_ROOT_PWD = credentials('DB_ROOT_PWD')
+       DB_USERNAME = credentials('DB_USERNAME')
+       JASYPT_DB_DECRYPT_PWD = credentials('JASYPT_DB_DECRYPT_PWD')
+       JASYPT_DB_CONNECTION_PWD = credentials('JASYPT_DB_CONNECTION_PWD')
+    }
     stages {
 
         stage('Build backend') {

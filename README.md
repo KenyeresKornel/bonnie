@@ -21,9 +21,9 @@ Using Spring Security the authentication module provides a secure channel to han
 
 RESTFUL API for the frontend, calls the core module.
 
-### h2-storage
+### postgres-storage
 
-A data storage plugin that uses Spring JDBC with embedded H2 database packaged into it.
+A data storage plugin that uses Spring JDBC connection via VPS server. VPS includes that docker (Postgres) container.
 
 ### messaging
 
@@ -43,12 +43,23 @@ This project uses Spring Boot framework.
 We use it for dependency injection and configuration management, but also because it has battle-tested integration
 packages with all of the major cloud native components.
 
-### H2 database
+### Postgres database
 
-For the time of writing the project has a H2 embedded database to store the data in. It has a nice off-the-shelf gui to
-manage the database.
-To connect to it the project uses Spring JDBC connector.
+For persistence storage, the project includes a Postgres database. The DB runs within a docker container in a VPS.
+In order to establish connection from developer environment requires to create own docker Postgres container.
+Once the container runs, set up the development environment is required to set up credential within application.properties file.
+As the following:
+   1. Optional to set up an environment variable (dec env) for encryptor MASTER_PASSWORD, POSTGRES_PWD, POSTGRES_USR (as the VPS docker were set up)
+   2. Generate credential within ./starter dir, using the following command:
+   bash:   - mvn jasypt:encrypt-value -Djasypt.encryptor.password=$BONNEE_MASTER_PWD -Djasypt.encryptor.algorithm=PBEWithMD5AndDES -Djasypt.plugin.value=$POSTGRES_USR
+   bash:   - mvn jasypt:encrypt-value -Djasypt.encryptor.password=$BONNEE_MASTER_PWD -Djasypt.encryptor.algorithm=PBEWithMD5AndDES -Djasypt.plugin.value=$POSTGRES_PWD
+   3. Grab the output value of each, (it starts with ENC(..., ) then place into the application properties file
+   e.g: spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)
 
+Possible error:
+No jasypt.plugin.value property provided -> Add "..." around the parameters like: 
+    
+    "-Djasypt.encryptor.password=$BONNEE_MASTER_PWD" "-Djasypt.encryptor.algorithm=PBEWithMD5AndDES" "-Djasypt.plugin.value=$POSTGRES_USR"
 ### Kafka
 
 The project uses Kafka as the message broker. You have to install, and configure it separately before starting the
@@ -82,9 +93,17 @@ mvn clean install
 ```
 
 After this, to run the project, issue the following command from the folder of starter module:
+### Prerequisite of run:
+    1. Requires to set up an environment variable for encryptor MASTER_PASSWORD, POSTGRES_PWD, POSTGRES_USR (as the VPS docker were set up)
+    2. Generate credential using the following command:
+    bash:   - mvn jasypt:encrypt-value -Djasypt.encryptor.password=$BONNEE_MASTER_PWD -Djasypt.encryptor.algorithm=PBEWithMD5AndDES -Djasypt.plugin.value=$POSTGRES_PWD
+    3. Grab the output value of each, (it starts with ENC(..., ) then place into the application properties file 
+        e.g: spring.datasource.username=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)
+             spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==) 
+     mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=$BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)"
 
 ```bash
-mvn spring-boot:run
+mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=$BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)"
 ```
 
 To run the angular frontend, issue the following command from the frontend folder:
@@ -112,6 +131,10 @@ Docker and Jenkins are both installed on our remote server.
 
 **Q: What accounts can I use to test Bonnie's functions?**
 A: You can find the account information in data.sql file. (hexagonal/h2-storage/src/main/resources/data.sql)
+
+
+A: You can find the user account information in V0X_XX__insert_assembly_user_data.sql file in order to login. 
+    e.g.(postgres-storage/src/main/resources/db/doodle/V01_03__insert_assembly_user_data.sql)
 
 **Q: How can I contribute to the Bonnie repository on Github?**
 A: You have to be added on the collaborator list by the repository owner in order to create/merge branches.

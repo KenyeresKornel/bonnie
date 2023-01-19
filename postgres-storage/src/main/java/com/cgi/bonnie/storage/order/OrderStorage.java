@@ -1,33 +1,31 @@
-package com.cgi.bonnie.h2storage.order;
+package com.cgi.bonnie.storage.order;
 
 import com.cgi.bonnie.businessrules.Status;
 import com.cgi.bonnie.businessrules.order.Order;
-import com.cgi.bonnie.businessrules.order.OrderStorage;
 import com.cgi.bonnie.businessrules.user.User;
-import com.cgi.bonnie.h2storage.user.H2UserStorage;
-import com.cgi.bonnie.h2storage.user.UserMapper;
+import com.cgi.bonnie.businessrules.user.UserStorage;
+import com.cgi.bonnie.storage.user.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @Primary
-public class H2OrderStorage implements OrderStorage {
+public class OrderStorage implements com.cgi.bonnie.businessrules.order.OrderStorage {
 
-    private H2OrderRepository orderRepository;
+    private OrderRepository orderRepository;
 
-    private H2UserStorage userStorage;
+    private UserStorage userStorage;
 
     private OrderMapper mapper;
 
     private UserMapper userMapper = new UserMapper();
 
     @Autowired
-    public H2OrderStorage(H2OrderRepository orderRepository, H2UserStorage userStorage, OrderMapper mapper) {
+    public OrderStorage(OrderRepository orderRepository, UserStorage userStorage, OrderMapper mapper) {
         this.orderRepository = orderRepository;
         this.userStorage = userStorage;
         this.mapper = mapper;

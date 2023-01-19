@@ -1,4 +1,4 @@
-package com.cgi.bonnie.h2storage.user;
+package com.cgi.bonnie.storage.user;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface H2UserRepository extends CrudRepository<AssemblyUser, Long> {
+public interface UserRepository extends CrudRepository<AssemblyUser, Long> {
 
     public AssemblyUser findByName(String username);
 

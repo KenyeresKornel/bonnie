@@ -1,4 +1,4 @@
-package com.cgi.bonnie.h2storage.order;
+package com.cgi.bonnie.storage.order;
 
 import com.cgi.bonnie.businessrules.Status;
 import org.springframework.data.repository.CrudRepository;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface H2OrderRepository extends CrudRepository<AssemblyOrder, Long> {
+public interface OrderRepository extends CrudRepository<AssemblyOrder, Long> {
 
     public List<AssemblyOrder> findAll();
     public List<AssemblyOrder> findAllByAssignedTo(Long assembler);
