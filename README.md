@@ -23,7 +23,10 @@ RESTFUL API for the frontend, calls the core module.
 
 ### postgres-storage
 
-A data storage plugin that uses Spring JDBC connection via VPS server. VPS includes that docker (Postgres) container.
+A data storage plugin that uses Spring JDBC connection to Postgres.
+
+The Postgres database runs
+separately, typically on the VPS (virtual private server) in a docker container. Other options are available too.
 
 ### messaging
 
@@ -45,7 +48,9 @@ packages with all of the major cloud native components.
 
 ### Postgres database
 
-For persistence storage, the project includes a Postgres database. The DB runs within a docker container in a VPS.
+For persistence storage, the project includes a Postgres database.
+
+On the VPS (Virtual Private Server) the DB runs within a docker container. For using Postgres from our local development environment, see the ... section.
 In order to establish connection from developer environment requires to create own docker Postgres container.
 Once the container runs, set up the development environment is required to set up credential within application.properties file.
 As the following:
@@ -84,7 +89,7 @@ For more information on Jenkins and Docker setup read the corresponding document
 
 # Building & Running the application locally
 
-First, start the zookeeper, and kafka services that is described in the ```doc/runKafka.txt``` file.
+First, start the zookeeper, and kafka services that is described in the ```doc/runKafka.md``` file.
 
 Then, to build the application, issue the following command in the parent project folder
 
@@ -92,9 +97,15 @@ Then, to build the application, issue the following command in the parent projec
 mvn clean install
 ```
 
-After this, to run the project, issue the following command from the folder of starter module:
-### Prerequisite of run:
-    1. Requires to set up an environment variable for encryptor MASTER_PASSWORD, POSTGRES_PWD, POSTGRES_USR (as the VPS docker were set up)
+## Connecting to Postgres
+
+There are two options to connect to Postgres
+
+1. Run the Postgres on the VPS and connect to that - as described in the ```doc/runPostgres.md``` file.
+1. Install Postgres locally and set the ```spring.datasource.url``` system property to point to your local database: ```-Dspring.datasource.url=jdbc:postgresql://localhost:anyport/dbname```
+
+## Encrypting passwords before running the application:
+    1. Requires to set up an environment variable for encryptor BONNIE_MASTER_PASSWORD, POSTGRES_PWD, POSTGRES_USR (The ```POSTGRES_*``` values are the ones specified by your choice of postgres installation)
     2. Generate credential using the following command:
     bash:   - mvn jasypt:encrypt-value -Djasypt.encryptor.password=$BONNEE_MASTER_PWD -Djasypt.encryptor.algorithm=PBEWithMD5AndDES -Djasypt.plugin.value=$POSTGRES_PWD
     3. Grab the output value of each, (it starts with ENC(..., ) then place into the application properties file 
@@ -102,9 +113,21 @@ After this, to run the project, issue the following command from the folder of s
              spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==) 
      mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=$BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)"
 
+
+## Running the application
+
+You can run the bonnie application with this command from the ./starter directory:
+
+```bash
+mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=$BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)" -Dspring.datasource.url=jdbc:postgresql://localhost:anyport/dbname
+```
+
+In case you are running Postgres locally, this is the command where you can specify the jdbc url:
+
 ```bash
 mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=$BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)"
 ```
+
 
 To run the angular frontend, issue the following command from the frontend folder:
 
