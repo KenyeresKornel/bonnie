@@ -50,7 +50,7 @@ packages with all of the major cloud native components.
 
 For persistence storage, the project includes a Postgres database.
 
-On the VPS (Virtual Private Server) the DB runs within a docker container. For using Postgres from our local development environment, see the ... section.
+On the VPS (Virtual Private Server) the DB runs within a docker container. For using Postgres from our local development environment, see the [Connecting to Postgres](#Connecting-to-Postgres) section.
 In order to establish connection from developer environment requires to create own docker Postgres container.
 Once the container runs, set up the development environment is required to set up credential within application.properties file.
 As the following:
@@ -102,7 +102,7 @@ mvn clean install
 There are two options to connect to Postgres
 
 1. Run the Postgres on the VPS and connect to that - as described in the ```doc/runPostgres.md``` file.
-1. Install Postgres locally and set the ```spring.datasource.url``` system property to point to your local database: ```-Dspring.datasource.url=jdbc:postgresql://localhost:anyport/dbname```
+2. Install Postgres locally and set the ```spring.datasource.url``` system property to point to your local database: ```-Dspring.datasource.url=jdbc:postgresql://localhost:5432/bonnie```
 
 ## Encrypting passwords before running the application:
     1. Requires to set up an environment variable for encryptor BONNIE_MASTER_PASSWORD, POSTGRES_PWD, POSTGRES_USR (The ```POSTGRES_*``` values are the ones specified by your choice of postgres installation)
@@ -116,7 +116,9 @@ There are two options to connect to Postgres
 
 ## Running the application
 
-You can run the bonnie application with this command from the ./starter directory:
+### Running the backend
+
+You can run the bonnie backend with this command from the ./starter directory:
 
 ```bash
 mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=$BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)" -Dspring.datasource.url=jdbc:postgresql://localhost:anyport/dbname
@@ -128,6 +130,7 @@ In case you are running Postgres locally, this is the command where you can spec
 mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=$BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)"
 ```
 
+### Running the frontend
 
 To run the angular frontend, issue the following command from the frontend folder:
 
