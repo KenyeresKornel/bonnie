@@ -1,8 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Order, OrderControllerService } from 'generated-client';
-
+import { Router } from '@angular/router';
 const snackBarConfig = {
   duration: 5 * 1000
 }
@@ -21,6 +21,7 @@ export class TrackingNumberComponent {
   constructor(public dialogRef: MatDialogRef<TrackingNumberComponent>,
     private _snackBar: MatSnackBar,
     private orderControllerService: OrderControllerService,
+    private router: Router,
     @Inject(MAT_DIALOG_DATA) public data: Order) {
       this.order = data;
       this.originalTrackingNr = data.trackingNr;
@@ -31,11 +32,13 @@ export class TrackingNumberComponent {
       next: respo => {
       this._snackBar.open("Tracking number saved!", '', snackBarConfig);
       this.dialogRef.close();
+      this.router.navigate([this.router.url]);
     }, 
      error: err => {
       this._snackBar.open("Error during settings tracking number!", 'OK', snackBarConfig);
       console.error(err);
       this.dialogRef.close();
+      this.router.navigate([this.router.url]);
      }
     });
   }

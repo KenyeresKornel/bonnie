@@ -3,6 +3,7 @@ import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { TrackingNumberComponent } from '../common/tracking-number/tracking-number.component';
 import { Order, OrderControllerService } from 'generated-client';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'order-table',
   templateUrl: './order-table.component.html',
@@ -15,9 +16,16 @@ export class OrderTableComponent {
   displayedColumns: string[] = ['id', 'quantity', 'status', 'assignedTo', 'trackingNr' ];
 
   constructor(private dialog: MatDialog,private orderControllerService: OrderControllerService, private router: Router) { }
-
+  
+  myObserver = {
+    next: (value: any) => {
+      console.log('Observer got a next value: ' + value);
+      this.router.navigate([this.router.url]);
+    },
+    error: (err:any) => console.error('Observer got an error: ' + err),
+    complete: () => console.log('Observer got a complete notification')
+  };
  
-
   openTrackingNr(order: Order): void {
     const dialogConfig = new MatDialogConfig();
 
@@ -26,22 +34,20 @@ export class OrderTableComponent {
 
     dialogConfig.data = order;
 
-    this.dialog.open(TrackingNumberComponent, dialogConfig)
-      .afterClosed().subscribe(result => this.router.navigate([this.router.url]));
+    this.dialog.open(TrackingNumberComponent, dialogConfig);
   }
 
-  releaseOrder(order : number): void { 
-    this.orderControllerService.releaseOrder(order).subscribe();
-    this.router.navigate([this.router.url]);
+  releaseOrder(order : number): void{ 
+    this.orderControllerService.releaseOrder(order)
+    .subscribe(this.myObserver);
   }
-
   claimOrder(order : number): void{ 
-    this.orderControllerService.assignToMe(order).subscribe();
-    this.router.navigate([this.router.url]);
+    this.orderControllerService.assignToMe(order) 
+    .subscribe(this.myObserver);
   }
 
   finishOrder(order : number): void{ 
-    this.orderControllerService.finishOrder(order).subscribe();
-    this.router.navigate([this.router.url]);
+    this.orderControllerService.finishOrder(order) 
+    .subscribe(this.myObserver);
   }
 }
