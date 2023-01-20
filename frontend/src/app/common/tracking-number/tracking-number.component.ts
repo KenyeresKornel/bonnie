@@ -12,7 +12,7 @@ const snackBarConfig = {
   templateUrl: './tracking-number.component.html',
   styleUrls: ['./tracking-number.component.css']
 })
-export class TrackingNumberComponent implements OnInit {
+export class TrackingNumberComponent {
 
   order: Order;
 
@@ -26,15 +26,17 @@ export class TrackingNumberComponent implements OnInit {
       this.originalTrackingNr = data.trackingNr;
     }
 
-  ngOnInit(): void { }
-
   saveTrackingNr() {
-    this.orderControllerService.shipOrder(this.order.id!, this.order.trackingNr!, 'response').subscribe(respo => {
+    this.orderControllerService.shipOrder(this.order.id!, this.order.trackingNr!, 'response').subscribe({
+      next: respo => {
       this._snackBar.open("Tracking number saved!", '', snackBarConfig);
       this.dialogRef.close();
-    }, err => {
+    }, 
+     error: err => {
       this._snackBar.open("Error during settings tracking number!", 'OK', snackBarConfig);
       console.error(err);
+      this.dialogRef.close();
+     }
     });
   }
 
