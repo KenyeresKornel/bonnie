@@ -15,17 +15,19 @@ export class OrderTableComponent {
 
   displayedColumns: string[] = ['id', 'quantity', 'status', 'assignedTo', 'trackingNr' ];
 
-  constructor(private dialog: MatDialog,private orderControllerService: OrderControllerService, private router: Router) { }
-  
   myObserver = {
-    next: (value: any) => {
+    next: (value:any) => {
       console.log('Observer got a next value: ' + value);
       this.router.navigate([this.router.url]);
     },
-    error: (err:any) => console.error('Observer got an error: ' + err),
-    complete: () => console.log('Observer got a complete notification')
-  };
- 
+    error: (err:any) => { 
+      console.error('Observer got an error: ' + err)
+      this.router.navigate([this.router.url]);
+    }
+  }
+
+  constructor(private dialog: MatDialog,private orderControllerService: OrderControllerService, private router: Router) { }
+   
   openTrackingNr(order: Order): void {
     const dialogConfig = new MatDialogConfig();
 
