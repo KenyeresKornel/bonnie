@@ -1,6 +1,7 @@
 package com.cgi.bonnie.commplugin.kafka;
 
 import com.cgi.bonnie.communicationplugin.SendRequest;
+import com.cgi.bonnie.schema.OrderJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

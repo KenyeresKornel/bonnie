@@ -2,6 +2,7 @@ package com.cgi.bonnie.storage.order;
 
 import com.cgi.bonnie.businessrules.Status;
 import com.cgi.bonnie.businessrules.order.Order;
+import com.cgi.bonnie.businessrules.order.OrderService;
 import com.cgi.bonnie.businessrules.user.User;
 import com.cgi.bonnie.businessrules.user.UserStorage;
 import com.cgi.bonnie.storage.user.UserMapper;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @Primary
 public class OrderStorage implements com.cgi.bonnie.businessrules.order.OrderStorage {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OrderStorage.class);
+    private final Logger log = LoggerFactory.getLogger(OrderStorage.class);
 
     private OrderRepository orderRepository;
 
@@ -48,7 +49,7 @@ public class OrderStorage implements com.cgi.bonnie.businessrules.order.OrderSto
         try {
             return orderRepository.save(mapper.fromOrder(order)).getId();
         } catch (Exception e) {
-            LOGGER.warn("Order cannot be created. ", e);
+            log.warn("Order cannot be created. ", e);
             return 0L;
         }
     }
