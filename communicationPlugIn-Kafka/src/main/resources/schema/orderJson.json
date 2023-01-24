@@ -1,0 +1,23 @@
+{
+  "type":"object",
+  "properties": {
+    "shopOrderId": {
+      "type": "string"
+    },
+    "goodsId": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "placementDate": {
+      "type": "string",
+      "format": "date-time",
+      "existingJavaType" : "java.time.LocalDateTime",
+      "customDateTimePattern" : "yyyy-MM-dd'T'HH:mm:ss"
+    },
+    "metadata": {
+      "type": "string"
+    }
+  }
+}
