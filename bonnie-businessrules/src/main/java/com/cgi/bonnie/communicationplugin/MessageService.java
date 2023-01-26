@@ -1,7 +1,9 @@
 package com.cgi.bonnie.communicationplugin;
 
+import com.cgi.bonnie.schema.OrderStatusUpdateJson;
+
 public interface MessageService {
 
-    void send(SendRequest request);
+    void send(OrderStatusUpdateJson request);
 
 }

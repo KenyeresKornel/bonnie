@@ -1,0 +1,17 @@
+{
+  "type":"object",
+  "properties": {
+    "shopOrderId": {
+      "type": "string"
+    },
+    "status": {
+      "$ref": "orderStatus.json"
+    },
+    "trackingNr": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "string"
+    }
+  }
+}

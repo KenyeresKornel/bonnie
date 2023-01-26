@@ -1,7 +1,7 @@
 package com.cgi.bonnie.commplugin.kafka;
 
-import com.cgi.bonnie.communicationplugin.SendRequest;
 import com.cgi.bonnie.schema.OrderJson;
+import com.cgi.bonnie.schema.OrderStatusUpdateJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,11 +36,11 @@ public class JsonOrderMapper {
         }
     }
 
-    public String write(SendRequest sendRequest) {
+    public String write(OrderStatusUpdateJson orderStatusUpdateJson) {
         try {
-            return objectMapper.writeValueAsString(sendRequest);
+            return objectMapper.writeValueAsString(orderStatusUpdateJson);
         } catch (JsonProcessingException e) {
-            log.error("Json conversion error in :" + sendRequest.toString(), e);
+            log.error("Json conversion error in :" + orderStatusUpdateJson.toString(), e);
             return null;
         }
     }

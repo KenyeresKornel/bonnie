@@ -56,6 +56,7 @@
                 <configuration>
                     <sourceDirectory>${basedir}/src/main/resources/schema</sourceDirectory>
                     <targetPackage>com.cgi.bonnie.schema</targetPackage>
+                    <generateBuilders>true</generateBuilders>
                 </configuration>
                 <executions>
                     <execution>

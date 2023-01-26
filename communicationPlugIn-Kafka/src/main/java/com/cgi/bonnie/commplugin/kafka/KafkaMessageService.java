@@ -1,7 +1,7 @@
 package com.cgi.bonnie.commplugin.kafka;
 
 import com.cgi.bonnie.communicationplugin.MessageService;
-import com.cgi.bonnie.communicationplugin.SendRequest;
+import com.cgi.bonnie.schema.OrderStatusUpdateJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class KafkaMessageService implements MessageService {
     }
 
     @Override
-    public void send(SendRequest request) {
+    public void send(OrderStatusUpdateJson request) {
         kafkaTemplate.send(topicName, jsonOrderMapper.write(request));
         log.debug("[{}] topic a message sent: {}", topicName, request);
     }
