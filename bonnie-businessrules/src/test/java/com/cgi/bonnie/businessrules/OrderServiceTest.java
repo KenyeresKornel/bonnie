@@ -7,6 +7,7 @@ import com.cgi.bonnie.businessrules.user.AuthUserStorage;
 import com.cgi.bonnie.businessrules.user.User;
 import com.cgi.bonnie.businessrules.user.UserStorage;
 import com.cgi.bonnie.communicationplugin.MessageService;
+import com.cgi.bonnie.schema.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -266,17 +267,21 @@ class OrderServiceTest {
         orderService.setTrackingNumber(ORDER_ID, TRACKING_NUMBER);
 
         verify(sender).send(argThat(sendRequest ->
-                sendRequest.shopOrderId().equals(SHOP_ORDER_ID)
-                        && sendRequest.status() == Status.SHIPPED
-                        && TRACKING_NUMBER.equals(sendRequest.trackingNr())));
+                sendRequest.getShopOrderId().equals(SHOP_ORDER_ID)
+                        && sendRequest.getStatus() == OrderStatus.SHIPPED
+                        && TRACKING_NUMBER.equals(sendRequest.getTrackingNr())));
     }
 
     @Test
     public void expectCreateOrderCallsCreate() {
         final String productId = "1";
+        final String shopOrderId = "1";
         final int quantity = 1;
         final Status status = Status.NEW;
-        Order o = new Order().withGoodsId(productId).withQuantity(quantity).withStatus(status);
+        Order o = new Order().withGoodsId(productId)
+                .withQuantity(quantity)
+                .withShopOrderId(shopOrderId)
+                .withStatus(status);
 
         orderService.createOrder(o);
 
@@ -357,7 +362,7 @@ class OrderServiceTest {
         orderService.updateStatus(ORDER_ID, Status.SHIPPED);
 
         verify(sender).send(argThat(sendRequest ->
-                sendRequest.status() == Status.SHIPPED && sendRequest.shopOrderId().equals(SHOP_ORDER_ID)));
+                sendRequest.getStatus() == OrderStatus.SHIPPED && sendRequest.getShopOrderId().equals(SHOP_ORDER_ID)));
     }
 
     @Test
@@ -395,7 +400,7 @@ class OrderServiceTest {
 
         orderService.finishOrder(ORDER_ID);
 
-        verify(sender).send(argThat(sendRequest -> sendRequest.status() == Status.ASSEMBLED));
+        verify(sender).send(argThat(sendRequest -> sendRequest.getStatus() == OrderStatus.ASSEMBLED));
     }
 
     @Test

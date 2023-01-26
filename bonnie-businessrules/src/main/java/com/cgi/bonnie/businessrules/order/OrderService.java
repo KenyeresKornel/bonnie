@@ -6,7 +6,8 @@ import com.cgi.bonnie.businessrules.user.User;
 import com.cgi.bonnie.businessrules.user.UserService;
 import com.cgi.bonnie.businessrules.user.UserStorage;
 import com.cgi.bonnie.communicationplugin.MessageService;
-import com.cgi.bonnie.communicationplugin.SendRequest;
+import com.cgi.bonnie.schema.OrderStatus;
+import com.cgi.bonnie.schema.OrderStatusUpdateJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,13 +87,7 @@ public class OrderService {
                     order.setTrackingNr(trackingNr);
                     order.setLastUpdate(LocalDateTime.now());
                     if (orderStorage.save(order)) {
-                        messageService.send(
-                                new SendRequest(
-                                        order.getShopOrderId(),
-                                        order.getStatus(),
-                                        order.getTrackingNr(),
-                                        order.getMetadata()));
-
+                        messageService.send(createSendRequest(order));
                         return true;
                     } else {
                         return false;
@@ -170,7 +165,7 @@ public class OrderService {
                 order.setStatus(status);
                 order.setLastUpdate(LocalDateTime.now());
                 if (orderStorage.save(order)) {
-                    messageService.send(new SendRequest(order.getShopOrderId(), status));
+                    messageService.send(createRequest(order.getShopOrderId(), status));
                     return true;
                 }
             }
@@ -186,14 +181,23 @@ public class OrderService {
         if (order != null && order.getStatus() == Status.CLAIMED && order.getAssignedTo().getId() == currentUser.getId()) {
             order.setStatus(Status.ASSEMBLED);
             if (orderStorage.save(order)) {
-                messageService.send(new SendRequest(order.getShopOrderId(), Status.ASSEMBLED));
+                messageService.send(createRequest(order.getShopOrderId(), Status.ASSEMBLED));
                 return true;
             }
         }
         return false;
     }
 
-    public SendRequest createSendRequest(Order order) {
-        return new SendRequest(order.getShopOrderId(), order.getStatus(), order.getMetadata());
+    public OrderStatusUpdateJson createRequest(String shopOrderId, Status status) {
+        return new OrderStatusUpdateJson().withShopOrderId(shopOrderId)
+                .withStatus(OrderStatus.valueOf(status.name()));
+    }
+
+    public OrderStatusUpdateJson createSendRequest(Order order) {
+        return new OrderStatusUpdateJson()
+                .withStatus(OrderStatus.valueOf(order.getStatus().name()))
+                .withShopOrderId(order.getShopOrderId())
+                .withMetadata(order.getMetadata())
+                .withTrackingNr(order.getTrackingNr());
     }
 }
