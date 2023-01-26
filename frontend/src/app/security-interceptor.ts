@@ -16,9 +16,10 @@ export class SecurityInterceptor implements HttpInterceptor {
 
     constructor(private userService: UserService, protected router: Router) { }
 
-    
+
     private handleAuthError(err: HttpErrorResponse): Observable<any> {
-    
+
+        // TODO somehow check the oauthFailure cookie too
         if (err.status === 401 || err.status === 403) {
             this.router.navigateByUrl(`/login-form`);
             this.userService.setLoggedIn(false);
@@ -31,7 +32,7 @@ export class SecurityInterceptor implements HttpInterceptor {
         request = request.clone({
             withCredentials: true
         });
-    
+
         return next.handle(request).pipe(catchError(err => this.handleAuthError(err)));
     }
 }

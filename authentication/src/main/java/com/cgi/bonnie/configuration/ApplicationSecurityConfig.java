@@ -60,7 +60,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        oAuthLoginSuccessHandler.setDefaultTargetUrl("http://localhost:4200/my-orders");
+        oAuthLoginSuccessHandler.setDefaultTargetUrl(oauthLoginSuccessUrl);
 
         http
                 .sessionManagement(session -> session
@@ -72,6 +72,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/logout").permitAll()
                 .antMatchers("/api/**").hasAnyRole(ASSEMBLER.name(), "USER")
                 .anyRequest().authenticated()
+                .and()
+                    .oauth2Login()
+                    .defaultSuccessUrl(oauthLoginSuccessUrl, true)
+                    .userInfoEndpoint()
+                    .userService(oAuth2UserService)
+                    .and()
+                    .successHandler(oAuthLoginSuccessHandler)
                 .and()
                 .logout()
                 .logoutUrl("/logout")

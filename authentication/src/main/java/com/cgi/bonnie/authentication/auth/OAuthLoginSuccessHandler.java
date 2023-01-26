@@ -9,6 +9,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,6 +29,11 @@ public class OAuthLoginSuccessHandler extends SavedRequestAwareAuthenticationSuc
                 userService.createUser(customOauth2User.getName(), customOauth2User.getEmail(), null, Role.ASSEMBLER);
             }
         }
+        // TODO have an oauth failure handler to unset this
+        var oauthSuccessCookie = new Cookie("oauthSuccess", "true");
+        oauthSuccessCookie.setMaxAge(-1);
+        oauthSuccessCookie.setPath("/");
+        response.addCookie(oauthSuccessCookie);
         super.onAuthenticationSuccess(request, response, authentication);
     }
 
