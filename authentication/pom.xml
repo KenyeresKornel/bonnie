@@ -3,7 +3,7 @@
     <parent>
         <artifactId>bonnie-parent</artifactId>
         <groupId>com.cgi.bonnie</groupId>
-        <version>${bonnie.version}</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>authentication</artifactId>
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>com.cgi.bonnie</groupId>
             <artifactId>businessrules</artifactId>
-            <version>${bonnie.version}</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

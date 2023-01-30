@@ -6,7 +6,7 @@
 
     <groupId>com.cgi.bonnie</groupId>
     <artifactId>bonnie-parent</artifactId>
-    <version>${bonnie.version}</version>
+    <version>1.0-SNAPSHOT</version>
     <modules>
         <module>bonnie-businessrules</module>
         <module>authentication</module>
@@ -21,7 +21,6 @@
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
         <spring.version>2.7.2</spring.version>
-        <bonnie.version>1.0-SNAPSHOT</bonnie.version>
     </properties>
 
     <dependencyManagement>
