@@ -30,6 +30,17 @@ export class OrderDetailsComponent implements OnInit {
     actions: 'Actions'
   };
 
+  myObserver = {
+    next: (value:any) => {
+      console.log('Observer got a next value: ' + value);
+      this.router.navigate([this.router.url]);
+    },
+    error: (err:any) => { 
+      console.error('Observer got an error: ' + err)
+      this.router.navigate([this.router.url]);
+    }
+  }
+
   constructor(protected orderControllerService: OrderControllerService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -67,12 +78,12 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   releaseOrder(order : number): void{ 
-    this.orderControllerService.releaseOrder(order).subscribe();
+    this.orderControllerService.releaseOrder(order).subscribe(this.myObserver);
   }
   claimOrder(order : number): void{ 
-    this.orderControllerService.assignToMe(order).subscribe();
+    this.orderControllerService.assignToMe(order).subscribe(this.myObserver);
   }
   finishOrder(order : number): void{ 
-    this.orderControllerService.finishOrder(order).subscribe();
+    this.orderControllerService.finishOrder(order).subscribe(this.myObserver);
   }
 }
