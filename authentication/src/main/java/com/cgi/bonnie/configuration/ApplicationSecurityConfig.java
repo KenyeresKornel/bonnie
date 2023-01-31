@@ -1,8 +1,11 @@
 package com.cgi.bonnie.configuration;
 
 import com.cgi.bonnie.authentication.auth.ApplicationUserService;
+import com.cgi.bonnie.authentication.auth.OAuthLoginFailureHandler;
 import com.cgi.bonnie.authentication.auth.OAuthLoginSuccessHandler;
+import com.cgi.bonnie.authentication.security.oauth2.CustomOAuth2User;
 import com.cgi.bonnie.authentication.security.oauth2.CustomOAuth2UserService;
+import com.cgi.bonnie.businessrules.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,13 +19,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 
 import static com.cgi.bonnie.authentication.security.ApplicationUserRole.ASSEMBLER;
@@ -47,20 +57,25 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
 
+    private final OAuthLoginFailureHandler oAuthLoginFailureHandler;
+
     @Autowired
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,
                                      ApplicationUserService applicationUserService,
                                      CustomOAuth2UserService oAuth2UserService,
-                                     OAuthLoginSuccessHandler oAuthLoginSuccessHandler) {
+                                     OAuthLoginSuccessHandler oAuthLoginSuccessHandler,
+                                     OAuthLoginFailureHandler oAuthLoginFailureHandler) {
         this.passwordEncoder = passwordEncoder;
         this.applicationUserService = applicationUserService;
         this.oAuth2UserService = oAuth2UserService;
         this.oAuthLoginSuccessHandler = oAuthLoginSuccessHandler;
+        this.oAuthLoginFailureHandler = oAuthLoginFailureHandler;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         oAuthLoginSuccessHandler.setDefaultTargetUrl(oauthLoginSuccessUrl);
+        oAuthLoginFailureHandler.setDefaultFailureUrl(oauthLoginSuccessUrl); // TODO configure to login
 
         http
                 .sessionManagement(session -> session
@@ -79,6 +94,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                     .userService(oAuth2UserService)
                     .and()
                     .successHandler(oAuthLoginSuccessHandler)
+                    .failureHandler(oAuthLoginFailureHandler)
                 .and()
                 .logout()
                 .logoutUrl("/logout")

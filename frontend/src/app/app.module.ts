@@ -28,6 +28,7 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
 import { TrackingNumberComponent } from './common/tracking-number/tracking-number.component';
 import { BASE_PATH } from 'generated-client';
 import { SecurityInterceptor } from './security-interceptor';
+import { OauthCookieService } from './oauthCookieService';
 import { UserService } from './userService';
 
 import { environment } from 'src/environments/environment';
@@ -68,6 +69,7 @@ import { environment } from 'src/environments/environment';
     { provide: BASE_PATH, useValue: environment.backendURL },
     { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },
     OrderControllerService,
+    OauthCookieService,
     UserControllerService,
     UserService,
   ],

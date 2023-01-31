@@ -19,7 +19,6 @@ export class SecurityInterceptor implements HttpInterceptor {
 
     private handleAuthError(err: HttpErrorResponse): Observable<any> {
 
-        // TODO somehow check the oauthFailure cookie too
         if (err.status === 401 || err.status === 403) {
             this.router.navigateByUrl(`/login-form`);
             this.userService.setLoggedIn(false);
