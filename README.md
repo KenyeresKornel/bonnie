@@ -24,9 +24,7 @@ RESTFUL API for the frontend, calls the core module.
 ### postgres-storage
 
 A data storage plugin that uses Spring JDBC connection to Postgres.
-
-The Postgres database runs
-separately, typically on the VPS (virtual private server) in a docker container. Other options are available too.
+The Postgres database runs separately, typically on the VPS (virtual private server) in a docker container. Other options are available too.
 
 ### messaging
 
@@ -48,29 +46,8 @@ packages with all of the major cloud native components.
 
 ### Postgres database
 
-For persistence storage, the project includes a Postgres database.
-
-On the VPS (Virtual Private Server) the DB runs within a docker container. For using Postgres from our local development environment, see the [Connecting to Postgres](#Connecting-to-Postgres) section.
-In order to establish connection from developer environment requires to create own docker Postgres container.
-Once the container runs, set up the development environment is required to set up credential within application.properties file.
-As the following:
-   1. Optional to set up an environment variable (dec env) for encryptor MASTER_PASSWORD, POSTGRES_PWD, POSTGRES_USR (as the VPS docker were set up)
-   2. Generate credential within ./starter dir, using the following command:
-   bash:   - mvn jasypt:encrypt-value -Djasypt.encryptor.password=$BONNEE_MASTER_PWD -Djasypt.encryptor.algorithm=PBEWithMD5AndDES -Djasypt.plugin.value=$POSTGRES_USR
-   bash:   - mvn jasypt:encrypt-value -Djasypt.encryptor.password=$BONNEE_MASTER_PWD -Djasypt.encryptor.algorithm=PBEWithMD5AndDES -Djasypt.plugin.value=$POSTGRES_PWD
-   3. Grab the output value of each, (it starts with ENC(..., ) then place into the application properties file
-   e.g: spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)
-
-Possible error:
-No jasypt.plugin.value property provided -> Add "..." around the parameters like: 
-    
-    "-Djasypt.encryptor.password=$BONNEE_MASTER_PWD" "-Djasypt.encryptor.algorithm=PBEWithMD5AndDES" "-Djasypt.plugin.value=$POSTGRES_USR"
-
-### VPS Docker Postgres setup for developer environment
-                                                     
-docker run -d --name "${USER}_postgres" -p 127.0.0.1:[pick free port num]:5432 -e POSTGRES_PASSWORD=doodle -e POSTGRES_USER=doodle -v /home/$USER/postgres/db:/var/lib/postgresql/data postgres
-
-ssh -N [${USER}]@bonnee.eu -L 5432:127.0.0.1:[picked port number]
+For persistence storage, the project includes a Postgres database running on the VPS (Virtual Private Server) within a docker container.
+To set up and connect to Postgres from your local development environment see the postgres documentation in docs folder.
 
 ### Kafka
 
@@ -97,50 +74,33 @@ For more information on Jenkins and Docker setup read the corresponding document
 # Building & Running the application locally
 
 First, start the zookeeper, and kafka services that is described in the ```doc/runKafka.md``` file.
-
-Then, to build the application, issue the following command in the parent project folder
-
+Then set up the postgres database as described in ```doc/postgres.md``` file.
+To build the application, issue the following command in the parent project folder
 ```bash
 mvn clean install
 ```
 
-## Connecting to Postgres
-
-There are two options to connect to Postgres
-
-1. Run the Postgres on the VPS and connect to that - as described in the ```doc/runPostgres.md``` file.
-2. Install Postgres locally and set the ```spring.datasource.url``` system property to point to your local database: ```-Dspring.datasource.url=jdbc:postgresql://localhost:5432/bonnie```
-
-## Encrypting passwords before running the application:
-    1. Requires to set up an environment variable for encryptor BONNIE_MASTER_PASSWORD, POSTGRES_PWD, POSTGRES_USR (The ```POSTGRES_*``` values are the ones specified by your choice of postgres installation)
-    2. Generate credential using the following command:
-    bash:   - mvn jasypt:encrypt-value -Djasypt.encryptor.password=$BONNEE_MASTER_PWD -Djasypt.encryptor.algorithm=PBEWithMD5AndDES -Djasypt.plugin.value=$POSTGRES_PWD
-    3. Grab the output value of each, (it starts with ENC(..., ) then place into the application properties file 
-        e.g: spring.datasource.username=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)
-             spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==) 
-     mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=$BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)"
-
-
 ## Running the application
 
 ### Running the backend
-
-You can run the bonnie backend with this command from the ./starter directory:
-
+(If encryption was not used) You can run the bonnie backend with following command from the ./starter directory:
 ```bash
-mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=$BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)" -Dspring.datasource.url=jdbc:postgresql://localhost:anyport/dbname
+mvn spring-boot:run
+```
+
+(If encryption was used) You can run the bonnie backend with this command from the ./starter directory:
+```bash
+mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)"
 ```
 
 In case you are running Postgres locally, this is the command where you can specify the jdbc url:
-
 ```bash
-mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=$BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)"
+mvn spring-boot:run -Dspring-boot.run.arguments="--jasypt.encryptor.password=BONNEE_MASTER_PWD --spring.datasource.password=ENC(6KpVjqrPwKvLt/5Cjo2ZHg==)" -Dspring.datasource.url=jdbc:postgresql://localhost:anyport/dbname
 ```
 
 ### Running the frontend
 
 To run the angular frontend, issue the following command from the frontend folder:
-
 ```bash
 ng serve
 ```
@@ -163,11 +123,7 @@ A: There's no need to install Jenkins nor Docker. In fact, it is not allowed to 
 Docker and Jenkins are both installed on our remote server.
 
 **Q: What accounts can I use to test Bonnie's functions?**
-A: You can find the account information in data.sql file. (hexagonal/h2-storage/src/main/resources/data.sql)
-
-
-A: You can find the user account information in V0X_XX__insert_assembly_user_data.sql file in order to login. 
-    e.g.(postgres-storage/src/main/resources/db/doodle/V01_03__insert_assembly_user_data.sql)
+A: You can find the user account information in V0X_XX__insert_assembly_user_data.sql file in order to login. e.g.(postgres-storage/src/main/resources/db/doodle/V01_03__insert_assembly_user_data.sql)
 
 **Q: How can I contribute to the Bonnie repository on Github?**
 A: You have to be added on the collaborator list by the repository owner in order to create/merge branches.
