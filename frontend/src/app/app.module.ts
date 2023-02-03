@@ -31,6 +31,7 @@ import { SecurityInterceptor } from './security-interceptor';
 import { UserService } from './userService';
 
 import { environment } from 'src/environments/environment';
+import { ProcessedOrdersComponent } from './processed-orders/processed-orders.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { environment } from 'src/environments/environment';
     OrderDetailsComponent,
     TrackingNumberComponent,
     LoginPageComponent,
-    OrderTableComponent
+    OrderTableComponent,
+    ProcessedOrdersComponent
   ],
   imports: [
     AppRoutingModule,
